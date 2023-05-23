@@ -167,3 +167,28 @@ public:
     }
 
 };
+
+class University{
+private:
+    std::string name;
+    std::unordered_set<Faculty> faculties;
+
+public:
+
+//constructor
+
+
+
+//accessor methods
+
+//acceseaza o anumita facultate, acceseaza numele
+
+//other methods
+
+
+
+}
+
+//bagi o metoda care iti numara cati studenti sunt la facultatea x, metoda sa o bagi in clasa faculty
+
+//cauta cum se lucreaza cu sfml
