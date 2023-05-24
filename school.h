@@ -166,6 +166,15 @@ public:
         return abbreviation;
     }
 
+    int getNumberofStudents() const{
+        int numberofstudents=0;
+        for (const auto& element : programs) {
+            // Access each element using the 'element' variable
+            numberofstudents+=element.getNumberOfStudents();
+       }
+       return numberofstudents;
+    }
+
 };
 
 class University{
@@ -177,9 +186,14 @@ public:
 
 //constructor
 
+    University(const std::string& name, std::unordered_set<Faculty> faculties )
+        : name(name), faculties(faculties){}
 
 
 //accessor methods
+    std::string getNameOfUniversity() const{
+            return name;
+    }
 
 //acceseaza o anumita facultate, acceseaza numele
 
@@ -187,7 +201,7 @@ public:
 
 
 
-}
+};
 
 //bagi o metoda care iti numara cati studenti sunt la facultatea x, metoda sa o bagi in clasa faculty
 
