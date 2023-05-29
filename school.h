@@ -268,8 +268,8 @@ public:
         for (const auto& element : programs) {
             // Access each element using the 'element' variable
             numberofstudents+=element.getNumberOfStudentsInProgram();
-       }
-       return numberofstudents;
+        }
+        return numberofstudents;
     }
 
 };
@@ -277,13 +277,16 @@ public:
 class University{
 private:
     std::string name;
+    std::string country;
+    std::string city;
+
     std::unordered_set<Faculty> faculties;
 
 public:
 
 //constructor
 
-    University(const std::string& name, std::unordered_set<Faculty> faculties )
+    University(const std::string& name, const std::string& country, const std::string& city, std::unordered_set<Faculty> faculties )
         : name(name), faculties(faculties){}
 
 
