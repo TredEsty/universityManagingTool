@@ -29,6 +29,9 @@ public:
     std::string getLastName() const{
         return lastName;
     }
+//other methods
+
+    friend std::string getAbbreviatedNameOfFaculty();//make the abreviate function friend;
 
 };
 
@@ -137,6 +140,8 @@ public:
         }
     }
 
+    friend std::string getAbbreviatedNameOfFaculty();//make the abreviate function friend
+
 };
 
 class Program{
@@ -210,6 +215,8 @@ public:
         return students.size(); 
     }
 
+    friend std::string getAbbreviatedNameOfFaculty();//make the abreviate function friend
+
 };
 
 class Faculty{
@@ -246,23 +253,6 @@ public:
 
 //other methods
 
-    std::string getAbbreviatedNameOfFaculty(){
-        std::string abbreviation;
-        bool prevIsSpace = true; // Flag to track if the previous character was a space
-        for(char c : name){
-            if(std::isalpha(c)){
-                if(prevIsSpace){
-                    abbreviation += c;
-                }
-                prevIsSpace = false;
-            }
-            else{
-                prevIsSpace = true;
-            }
-        }
-        return abbreviation;
-    }
-
     int getNumberOfStudentsInFaculty() const{
         int numberofstudents=0;
         for (const auto& element : programs) {
@@ -271,6 +261,8 @@ public:
         }
         return numberofstudents;
     }
+
+    friend std::string getAbbreviatedNameOfFaculty();//make the abreviate function friend
 
 };
 
@@ -312,29 +304,30 @@ public:
 
 //other methods
 
-    std::string getAbbreviatedNameOfUniversity(){
-        std::string abbreviation;
-        bool prevIsSpace = true; // Flag to track if the previous character was a space
-        for(char c : name){
-            if(std::isalpha(c)){
-                if(prevIsSpace){
-                    abbreviation += c;
-                }
-                prevIsSpace = false;
-            }
-            else{
-                prevIsSpace = true;
-            }
-        }
-        return abbreviation;
-    }
-
     int getNumberOfFaculties(){
         return faculties.size;
     }
+    friend std::string getAbbreviatedNameOfFaculty();//make the abreviate function friend
 
 };
 
 //bagi o metoda care iti numara cati studenti sunt la facultatea x, metoda sa o bagi in clasa faculty
 
 //cauta cum se lucreaza cu sfml
+
+std::string getAbbreviatedName(){
+    std::string abbreviation;
+    bool prevIsSpace = true; // Flag to track if the previous character was a space
+    for(char c : name){
+        if(std::isalpha(c)){
+            if(prevIsSpace){
+                abbreviation += c;
+            }
+            prevIsSpace = false;
+        }
+        else{
+            prevIsSpace = true;
+        }
+    }
+    return abbreviation;
+}
