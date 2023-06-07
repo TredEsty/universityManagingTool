@@ -9,12 +9,14 @@ private:
     std::string ID;
     std::string firstName;
     std::string lastName;
+    int year;
+    int semester;
 
 public:
 //constructor
 
-    Student(const std::string& ID, const std::string& firstName, const std::string& lastName)
-    : ID(ID), firstName(firstName), lastName(lastName){}
+    Student(const std::string& ID, const std::string& firstName, const std::string& lastName, int year=1, int semester=1)
+    : ID(ID), firstName(firstName), lastName(lastName), year(year), semester(semester){}
 
 //accessor methods
 
@@ -29,9 +31,11 @@ public:
     std::string getLastName() const{
         return lastName;
     }
+
+
 //other methods
 
-    friend std::string getAbbreviatedNameOfFaculty();//make the abreviate function friend;
+    
 
 };
 
