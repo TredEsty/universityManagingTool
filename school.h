@@ -4,42 +4,47 @@
 #include<iostream>
 #include<fstream>
 
-class Student{
+class Student {
 private:
     std::string ID;
     std::string firstName;
     std::string lastName;
     int year;
     int semester;
+//the subjects for the current semester he is in
+    
 
 public:
 //constructor
 
     Student(const std::string& ID, const std::string& firstName, const std::string& lastName, int year=1, int semester=1)
-    : ID(ID), firstName(firstName), lastName(lastName), year(year), semester(semester){}
+    : ID(ID), firstName(firstName), lastName(lastName), year(year), semester(semester) {}
 
 //accessor methods
 
-    std::string getID() const{
+    std::string getID() const {
         return ID;
     }
 
-    std::string getFirstName() const{
+    std::string getFirstName() const {
         return firstName;
     }
 
-    std::string getLastName() const{
+    std::string getLastName() const {
         return lastName;
     }
 
 
 //other methods
 
-    
+    void incrementSemester() {
+        semester++;
+        
+    }
 
 };
 
-class Subject{
+class Subject {
 private:
     std::string name;
     float LT1;//grade at lab test 1
@@ -54,23 +59,23 @@ public:
 //constructor
 
     Subject(const std::string& name, float LT1 = -1, float LT2 = -1, float MTE = -1, float FE = -1, int labAttendance = 0, int courseAttendance = 0)
-    : name(name), LT1(LT1), LT2(LT2), MTE(MTE), FE(FE), labAttendance(labAttendance), courseAttendance(courseAttendance){}
+    : name(name), LT1(LT1), LT2(LT2), MTE(MTE), FE(FE), labAttendance(labAttendance), courseAttendance(courseAttendance) {}
 
 //accessor methods
 
-    std::string getSubjectName() const{
+    std::string getSubjectName() const {
         return name;
     }
 
-    float getLT1() const{
+    float getLT1() const {
         return LT1;
     }
 
-    float getLT2() const{
+    float getLT2() const {
         return LT2;
     }
 
-    float getMTE() const{
+    float getMTE() const {
         return MTE;
     }
 
@@ -78,65 +83,65 @@ public:
         return FE;
     }
     
-    int getLabAttendance() const{
+    int getLabAttendance() const {
         return labAttendance;
     }
 
-    int getCourseAttendance() const{
+    int getCourseAttendance() const {
         return courseAttendance
     }
 
 //update methods
 
-    void updateSubjectName(const std::string& name){
+    void updateSubjectName(const std::string& name) {
         this->name=name;
     }
 
-    void updateLT1(float LT1){
+    void updateLT1(float LT1) {
         this->LT1=LT1;
     }
 
-    void updateLT2()onst{
+    void updateLT2() {
         this->LT2=LT2;
     }
 
-    void updateMTE(){
+    void updateMTE() {
         this->MTE=MTE;
     }
 
-    void updateFE(){
+    void updateFE() {
         this->FE=FE;
     }
     
-    void updateLabAttendance(int labAttendance){
+    void updateLabAttendance(int labAttendance) {
         this->labAttendance=labAttendance;
     }
 
-    void updateCourseAttendance(int courseAttendance){
+    void updateCourseAttendance(int courseAttendance) {
         this->courseAttendance=courseAttendance;
     }
 
 //other methods
 
-    float getLabGrade() const{
+    float getLabGrade() const {
         return (LT1+LT2)/2;
     }
 
-    float getFinalGrade() const{
-        if(FE==-1){
+    float getFinalGrade() const {
+        if(FE==-1) {
             return -1;//will print N/A
         }
         else
             return (this->getLabGrade()*0.3 + MTE*0.2 + FE*0.5);
     }
 
-    bool examEntrance(){
+    bool examEntrance() {
         if(labAttendance>=10 && courseAttendance>=5 && getLabGrade() >=5)
             return true;//will be able to enter exam
     }
 
     bool passStatus(){
-        if(getFinalGrade>=5){
+        if(getFinalGrade>=5) {
             return true;
         }
         else{
@@ -144,11 +149,9 @@ public:
         }
     }
 
-    friend std::string getAbbreviatedNameOfFaculty();//make the abreviate function friend
-
 };
 
-class Program{
+class Program {
 private:
     std::string name;
     std::unordered_set<Student> students;
@@ -174,11 +177,11 @@ public:
 
 //accessor methods
 
-    std::string getNameOfProgram() const{
+    std::string getNameOfProgram() const {
         return name;
     }
 
-    std::unordered_set<Subject> getSubjectsForASemester(int s) const{
+    std::unordered_set<Subject> getSubjectsForASemester(int s) const {
         switch (s){
             case 1:
                 return subjectsForSem1;
@@ -205,7 +208,7 @@ public:
 
 //update methods
 
-    void changeProgramName(const std::string& newname){
+    void changeProgramName(const std::string& newname) {
         name=newname;
     }
 
@@ -215,7 +218,7 @@ public:
 
 //other methods
 
-    int getNumberOfStudentsInProgram() const{
+    int getNumberOfStudentsInProgram() const {
         return students.size(); 
     }
 
@@ -233,31 +236,31 @@ public:
 //constructor
 
     Faculty(const std::string& name, std::unordered_set<Program> programs)
-    : name(name), programs(programs){}
+    : name(name), programs(programs) {}
 
 //accessor methods
 
-    std::string getNameOfFaculty() const{
+    std::string getNameOfFaculty() const {
         return name;
     }
 
-    int getNumberOfPrograms(){
+    int getNumberOfPrograms() {
         return programs.size;
     }
 
 //update methods
 
-    void changeFacultyName(const std::string& newname){
+    void changeFacultyName(const std::string& newname) {
         name=newname;
     }
 
-    void addProgram(Faculty h){
+    void addProgram(Faculty h) {
         faculties.append(h);
     }
 
 //other methods
 
-    int getNumberOfStudentsInFaculty() const{
+    int getNumberOfStudentsInFaculty() const {
         int numberofstudents=0;
         for (const auto& element : programs) {
             // Access each element using the 'element' variable
@@ -270,7 +273,7 @@ public:
 
 };
 
-class University{
+class University {
 private:
     std::string name;
     std::string country;
@@ -283,13 +286,13 @@ public:
 //constructor
 
     University(const std::string& name, const std::string& country, const std::string& city, std::unordered_set<Faculty> faculties )
-        : name(name), faculties(faculties){}
+        : name(name), faculties(faculties) {}
 
 
 //accessor methods
 
-    std::string getNameOfUniversity() const{
-            return name;
+    std::string getNameOfUniversity() const {
+        return name;
     }
 
     
@@ -298,17 +301,17 @@ public:
 
 //update methods
 
-    void changeUniversityName(std::string newname){
+    void changeUniversityName(std::string newname) {
         name=newname;
     }
 
-    void addFaculty(Faculty h){
+    void addFaculty(Faculty h) {
         faculties.append(h);
     }
 
 //other methods
 
-    int getNumberOfFaculties(){
+    int getNumberOfFaculties() {
         return faculties.size;
     }
     friend std::string getAbbreviatedNameOfFaculty();//make the abreviate function friend
@@ -319,17 +322,17 @@ public:
 
 //cauta cum se lucreaza cu sfml
 
-std::string getAbbreviatedName(){
+std::string getAbbreviatedName() {
     std::string abbreviation;
     bool prevIsSpace = true; // Flag to track if the previous character was a space
-    for(char c : name){
-        if(std::isalpha(c)){
-            if(prevIsSpace){
+    for(char c : name) {
+        if(std::isalpha(c)) {
+            if(prevIsSpace) {
                 abbreviation += c;
             }
             prevIsSpace = false;
         }
-        else{
+        else {
             prevIsSpace = true;
         }
     }

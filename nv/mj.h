@@ -60,16 +60,14 @@ public:
         int totalCredits=0;
         bool passedAll=1;
 
-        for (auto it = subjects.begin(); it != subjects.end(); ++it) {
-            if ((*it).passStatus()) {
-                totalCredits += (*it).getCredits();
-            } else {
-                notPassedSubjects.push_back((*it).resetSubject());
-                // Modify the subject in the unordered set
-                const_cast<Subject&>(*it).modifySomeProperty();
+        for (  Subject subject : subjects) {
+            if (!subject.passStatus()) {
+                notPassedSubjects.insert(subject.resetSubject());
+            }
+            else {
+                totalCredits+=subject.getCredits();
             }
         }
-
         if (totalCredits >= 120){
             semester++;
             switch (semester) {
@@ -106,8 +104,9 @@ public:
             }
         }
         else {
-            for (auto& subject : subjects) {
-                subject.resetSubject();
+            for (auto it = subjects.begin(); it != subjects.end(); ++it) {
+                Subject& subject = const_cast<Subject&>(*it);
+                subject = subject.resetSubject();
             }
         }
         
@@ -123,14 +122,14 @@ private:
     float FE;//grade at final exam
     int labAttendance;
     int courseAttendance;
-    int credits;
+
 
 public:
 
 //constructor
 
     Subject(const std::string& name, float LT1 = -1, float LT2 = -1, float MTE = -1, float FE = -1, int labAttendance = 0, int courseAttendance = 0, int credits=0)
-    : name(name), LT1(LT1), LT2(LT2), MTE(MTE), FE(FE), labAttendance(labAttendance), courseAttendance(courseAttendance), credits(credits){}
+    : name(name), LT1(LT1), LT2(LT2), MTE(MTE), FE(FE), labAttendance(labAttendance), courseAttendance(courseAttendance){}
 
 //accessor methods
 
@@ -159,12 +158,10 @@ public:
     }
 
     int getCourseAttendance() const{
-        return courseAttendance
+        return courseAttendance;
     }
 
-    int getCredits() const {
-        return credits;
-    }
+    
 
 //update methods
 
@@ -176,7 +173,7 @@ public:
         this->LT1=LT1;
     }
 
-    void updateLT2(){
+    void updateLT2() {
         this->LT2=LT2;
     }
 
@@ -196,43 +193,44 @@ public:
         this->courseAttendance=courseAttendance;
     }
 
-    void resetSubject() {
-        name = "";
-        LT1 = -1;
-        LT2 = -1;
-        MTE = -1;
-        FE = -1;
-        labAttendance = 0;
-        courseAttendance = 0;
+    Subject resetSubject() {
+        Subject obj=Subject(name);
+
+        return obj;
     }
 
 //other methods
 
-    float getLabGrade() const {
+    float getLabGrade() const{
         return (LT1+LT2)/2;
     }
 
-    float getFinalGrade() const {
-        if(FE==-1) {
+    float getFinalGrade() const{
+        if(FE==-1){
             return -1;//will print N/A
         }
         else
             return (this->getLabGrade()*0.3 + MTE*0.2 + FE*0.5);
     }
 
-    bool examEntrance() const {
+    bool examEntrance(){
         if(labAttendance>=10 && courseAttendance>=5 && getLabGrade() >=5)
             return true;//will be able to enter exam
         return false;//will not be able to enter exam
     }
 
     bool passStatus(){
-        if(getFinalGrade()>=5) {
-            credits=5*getFinalGrade();
+        if(getFinalGrade()>=5){
             return true;
         }
-        return false;
+        else{
+            return false;
+        }
     }
+    int getCredits() const {
+        return 5*getFinalGrade();
+    }
+
 };
 
 class Program{
@@ -297,7 +295,7 @@ public:
     }
 
     void addStudent(Student h){
-        student.append(h);
+        students.insert(h);
     }
 
 //other methods
@@ -309,8 +307,7 @@ public:
 };
 
 
-
-// //------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 
 // void readData(Program& obj) {
 //     // Get the name of the parent folder
