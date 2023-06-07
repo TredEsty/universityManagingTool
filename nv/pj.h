@@ -308,201 +308,201 @@ public:
 
 
 
-//------------------------------------------------------------------------------------------------------------------------------------
+// //------------------------------------------------------------------------------------------------------------------------------------
 
-void readData(Program& obj) {
-    // Get the name of the parent folder
-    std::string folderName;
-    std::filesystem::path programPath = std::filesystem::path(argv[0]);
-    if (std::filesystem::is_directory(programPath)) {
-        // Use the name of the parent folder as the program name
-        folderName = programPath.filename().string();
-    }
-    else {
-        // Use the name of the grandparent folder as the program name
-        folderName = programPath.parent_path().parent_path().filename().string();
-    }
-    obj.changeProgramName(folderName);
+// void readData(Program& obj) {
+//     // Get the name of the parent folder
+//     std::string folderName;
+//     std::filesystem::path programPath = std::filesystem::path(argv[0]);
+//     if (std::filesystem::is_directory(programPath)) {
+//         // Use the name of the parent folder as the program name
+//         folderName = programPath.filename().string();
+//     }
+//     else {
+//         // Use the name of the grandparent folder as the program name
+//         folderName = programPath.parent_path().parent_path().filename().string();
+//     }
+//     obj.changeProgramName(folderName);
 
-    // Read student data
-    for (int i = 1; i <= 100; i++) {
-        std::string filename = folderName + "/student" + std::to_string(i) + ".txt";
-        std::ifstream file(filename);
-        if (file.is_open()) {
-            std::string studentID, firstName, lastName;
-            // Read student data from the file
-            std::getline(file, studentID);
-            std::getline(file, firstName);
-            std::getline(file, lastName);
-            // Create a Student object and add it to the program
-            Student student(studentID, firstName, lastName);
-            obj.addStudent(student);
-            file.close();
-        }
-    }
+//     // Read student data
+//     for (int i = 1; i <= 100; i++) {
+//         std::string filename = folderName + "/student" + std::to_string(i) + ".txt";
+//         std::ifstream file(filename);
+//         if (file.is_open()) {
+//             std::string studentID, firstName, lastName;
+//             // Read student data from the file
+//             std::getline(file, studentID);
+//             std::getline(file, firstName);
+//             std::getline(file, lastName);
+//             // Create a Student object and add it to the program
+//             Student student(studentID, firstName, lastName);
+//             obj.addStudent(student);
+//             file.close();
+//         }
+//     }
 
-    // Read subjects data for each semester
-    for (int sem = 1; sem <= 6; sem++) {
-        std::string filename = folderName + "/sem" + std::to_string(sem) + ".txt";
-        std::ifstream file(filename);
-        if (file.is_open()) {
-            std::unordered_set<Subject>& subjects = obj.getSubjectsForASemester(sem);
-            std::string subjectName;
-            while (std::getline(file, subjectName)) {
-                // Create a Subject object and add it to the semester's subjects
-                Subject subject(subjectName);
-                subjects.insert(subject);
-            }
-            file.close();
-        }
-    }
-}
-
-
-void readData() {
-    // Get the current directory path
-    std::filesystem::path currentPath = std::filesystem::current_path();
-
-    // Find the Informatica folder
-    std::filesystem::path informaticaPath;
-    for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
-        if (entry.is_directory() && entry.path().filename() != "Informatica") {
-            informaticaPath = entry.path();
-            break;
-        }
-    }
-
-    // Check if Informatica folder exists
-    if (informaticaPath.empty()) {
-        std::cout << "Informatica folder not found." << std::endl;
-        return;
-    }
-
-    // Create a program with the name of the Informatica folder
-    std::string programName = informaticaPath.filename().string();
-    Program program(programName);
-
-    // Read subjects for each semester
-    for (int semester = 1; semester <= 6; ++semester) {
-        std::filesystem::path subjectsPath = informaticaPath / ("sem" + std::to_string(semester) + ".txt");
-
-        std::ifstream subjectsFile(subjectsPath);
-        if (!subjectsFile) {
-            std::cout << "Failed to open subjects file for semester " << semester << "." << std::endl;
-            continue;
-        }
-
-        std::string subjectName;
-        int subjectCredits;
-
-        while (subjectsFile >> subjectName >> subjectCredits) {
-            Subject subject(subjectName, subjectCredits);
-            program.addSubjectForSemester(semester, subject);
-        }
-
-        subjectsFile.close();
-    }
-
-    // Read student data
-    std::filesystem::path studentsPath = informaticaPath / "students";
-
-    for (const auto& entry : std::filesystem::directory_iterator(studentsPath)) {
-        if (!entry.is_regular_file())
-            continue;
-
-        std::ifstream studentFile(entry.path());
-        if (!studentFile) {
-            std::cout << "Failed to open student file: " << entry.path() << std::endl;
-            continue;
-        }
-
-        std::string studentID;
-        std::string firstName;
-        std::string lastName;
-        int semester;
-
-        if (!(studentFile >> studentID >> firstName >> lastName >> semester)) {
-            std::cout << "Failed to read student data from file: " << entry.path() << std::endl;
-            continue;
-        }
-
-        Student student(&program, studentID, firstName, lastName, semester);
-
-        std::string subjectName;
-        int subjectCredits;
-
-        while (studentFile >> subjectName >> subjectCredits) {
-            Subject subject(subjectName, subjectCredits);
-            student.addSubject(subject);
-        }
-
-        studentFile.close();
-
-        // Update the semester
-        student.updateSemester();
-
-        // Print student information
-        std::cout << "Student ID: " << student.getID() << std::endl;
-        std::cout << "Name: " << student.getFirstName() << " " << student.getLastName() << std::endl;
-    }
-}
-
-void readData(Program& obj) {
-    // Get the name of the parent folder
-    std::string folderName;
-    std::filesystem::path programPath = std::filesystem::path(argv[0]);
-
-    if (std::filesystem::is_directory(programPath)) {
-        // Use the name of the parent folder as the program name
-        folderName = programPath.filename().string();
-    }
-    else {
-        // Use the name of the grandparent folder as the program name
-        folderName = programPath.parent_path().parent_path().filename().string();
-    }
-    obj.changeProgramName(folderName);
-
-    // Read student data
-    for (int i = 1; i <= 100; i++) {
-        std::string filename = folderName + "/student" + std::to_string(i) + ".txt";
-        std::ifstream file(filename);
-        if (file.is_open()) {
-            std::string studentID, firstName, lastName;
-            // Read student data from the file
-            std::getline(file, studentID);
-            std::getline(file, firstName);
-            std::getline(file, lastName);
-            // Create a Student object and add it to the program
-            Student student(obj, studentID, firstName, lastName);
-            obj.addStudent(student);
-            file.close();
-        }
-    }
-
-    // Read subjects data for each semester
-    for (int sem = 1; sem <= 6; sem++) {
-        std::string filename = folderName + "/sem" + std::to_string(sem) + ".txt";
-        std::ifstream file(filename);
-        if (file.is_open()) {
-            std::unordered_set<Subject>& subjects = obj.getSubjectsForASemester(sem);
-            std::string subjectName;
-            while (std::getline(file, subjectName)) {
-                // Create a Subject object and add it to the semester's subjects
-                Subject subject(subjectName);
-                subjects.insert(subject);
-            }
-            file.close();
-        }
-    }
-}
+//     // Read subjects data for each semester
+//     for (int sem = 1; sem <= 6; sem++) {
+//         std::string filename = folderName + "/sem" + std::to_string(sem) + ".txt";
+//         std::ifstream file(filename);
+//         if (file.is_open()) {
+//             std::unordered_set<Subject>& subjects = obj.getSubjectsForASemester(sem);
+//             std::string subjectName;
+//             while (std::getline(file, subjectName)) {
+//                 // Create a Subject object and add it to the semester's subjects
+//                 Subject subject(subjectName);
+//                 subjects.insert(subject);
+//             }
+//             file.close();
+//         }
+//     }
+// }
 
 
-    for (const auto& entry : std::filesystem::directory_iterator(parentPath)) {
-        if (entry.is_directory()) {
-            std::string folderName = entry.path().filename().string();
-            std::cout << "Folder Name: " << folderName << std::endl;
-        }
-    }
+// void readData() {
+//     // Get the current directory path
+//     std::filesystem::path currentPath = std::filesystem::current_path();
+
+//     // Find the Informatica folder
+//     std::filesystem::path informaticaPath;
+//     for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
+//         if (entry.is_directory() && entry.path().filename() != "Informatica") {
+//             informaticaPath = entry.path();
+//             break;
+//         }
+//     }
+
+//     // Check if Informatica folder exists
+//     if (informaticaPath.empty()) {
+//         std::cout << "Informatica folder not found." << std::endl;
+//         return;
+//     }
+
+//     // Create a program with the name of the Informatica folder
+//     std::string programName = informaticaPath.filename().string();
+//     Program program(programName);
+
+//     // Read subjects for each semester
+//     for (int semester = 1; semester <= 6; ++semester) {
+//         std::filesystem::path subjectsPath = informaticaPath / ("sem" + std::to_string(semester) + ".txt");
+
+//         std::ifstream subjectsFile(subjectsPath);
+//         if (!subjectsFile) {
+//             std::cout << "Failed to open subjects file for semester " << semester << "." << std::endl;
+//             continue;
+//         }
+
+//         std::string subjectName;
+//         int subjectCredits;
+
+//         while (subjectsFile >> subjectName >> subjectCredits) {
+//             Subject subject(subjectName, subjectCredits);
+//             program.addSubjectForSemester(semester, subject);
+//         }
+
+//         subjectsFile.close();
+//     }
+
+//     // Read student data
+//     std::filesystem::path studentsPath = informaticaPath / "students";
+
+//     for (const auto& entry : std::filesystem::directory_iterator(studentsPath)) {
+//         if (!entry.is_regular_file())
+//             continue;
+
+//         std::ifstream studentFile(entry.path());
+//         if (!studentFile) {
+//             std::cout << "Failed to open student file: " << entry.path() << std::endl;
+//             continue;
+//         }
+
+//         std::string studentID;
+//         std::string firstName;
+//         std::string lastName;
+//         int semester;
+
+//         if (!(studentFile >> studentID >> firstName >> lastName >> semester)) {
+//             std::cout << "Failed to read student data from file: " << entry.path() << std::endl;
+//             continue;
+//         }
+
+//         Student student(&program, studentID, firstName, lastName, semester);
+
+//         std::string subjectName;
+//         int subjectCredits;
+
+//         while (studentFile >> subjectName >> subjectCredits) {
+//             Subject subject(subjectName, subjectCredits);
+//             student.addSubject(subject);
+//         }
+
+//         studentFile.close();
+
+//         // Update the semester
+//         student.updateSemester();
+
+//         // Print student information
+//         std::cout << "Student ID: " << student.getID() << std::endl;
+//         std::cout << "Name: " << student.getFirstName() << " " << student.getLastName() << std::endl;
+//     }
+// }
+
+// void readData(Program& obj) {
+//     // Get the name of the parent folder
+//     std::string folderName;
+//     std::filesystem::path programPath = std::filesystem::path(argv[0]);
+
+//     if (std::filesystem::is_directory(programPath)) {
+//         // Use the name of the parent folder as the program name
+//         folderName = programPath.filename().string();
+//     }
+//     else {
+//         // Use the name of the grandparent folder as the program name
+//         folderName = programPath.parent_path().parent_path().filename().string();
+//     }
+//     obj.changeProgramName(folderName);
+
+//     // Read student data
+//     for (int i = 1; i <= 100; i++) {
+//         std::string filename = folderName + "/student" + std::to_string(i) + ".txt";
+//         std::ifstream file(filename);
+//         if (file.is_open()) {
+//             std::string studentID, firstName, lastName;
+//             // Read student data from the file
+//             std::getline(file, studentID);
+//             std::getline(file, firstName);
+//             std::getline(file, lastName);
+//             // Create a Student object and add it to the program
+//             Student student(obj, studentID, firstName, lastName);
+//             obj.addStudent(student);
+//             file.close();
+//         }
+//     }
+
+//     // Read subjects data for each semester
+//     for (int sem = 1; sem <= 6; sem++) {
+//         std::string filename = folderName + "/sem" + std::to_string(sem) + ".txt";
+//         std::ifstream file(filename);
+//         if (file.is_open()) {
+//             std::unordered_set<Subject>& subjects = obj.getSubjectsForASemester(sem);
+//             std::string subjectName;
+//             while (std::getline(file, subjectName)) {
+//                 // Create a Subject object and add it to the semester's subjects
+//                 Subject subject(subjectName);
+//                 subjects.insert(subject);
+//             }
+//             file.close();
+//         }
+//     }
+// }
+
+
+//     for (const auto& entry : std::filesystem::directory_iterator(parentPath)) {
+//         if (entry.is_directory()) {
+//             std::string folderName = entry.path().filename().string();
+//             std::cout << "Folder Name: " << folderName << std::endl;
+//         }
+//     }
 
 
 
