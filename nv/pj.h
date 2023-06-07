@@ -61,11 +61,11 @@ public:
         bool passedAll=1;
 
         for (const auto& subject : subjects) {
-            if (!subject.passStatus()) {
-                notPassedSubjects.insert(subject.resetSubject());
+            if (subject.passStatus()) {
+                totalCredits+=subject.getCredits();
             }
             else {
-                totalCredits+=subject.getCredits();
+                notPassedSubjects.push_back(subject.resetSubject());
             }
         }
         if (totalCredits >= 120){
@@ -174,7 +174,7 @@ public:
         this->LT1=LT1;
     }
 
-    void updateLT2()onst{
+    void updateLT2(){
         this->LT2=LT2;
     }
 
@@ -206,34 +206,31 @@ public:
 
 //other methods
 
-    float getLabGrade() const{
+    float getLabGrade() const {
         return (LT1+LT2)/2;
     }
 
-    float getFinalGrade() const{
-        if(FE==-1){
+    float getFinalGrade() const {
+        if(FE==-1) {
             return -1;//will print N/A
         }
         else
             return (this->getLabGrade()*0.3 + MTE*0.2 + FE*0.5);
     }
 
-    bool examEntrance(){
+    bool examEntrance() const {
         if(labAttendance>=10 && courseAttendance>=5 && getLabGrade() >=5)
             return true;//will be able to enter exam
         return false;//will not be able to enter exam
     }
 
     bool passStatus(){
-        if(getFinalGrade()>=5){
+        if(getFinalGrade()>=5) {
             credits=5*getFinalGrade();
             return true;
         }
-        else{
-            return false;
-        }
+        return false;
     }
-
 };
 
 class Program{
@@ -310,6 +307,9 @@ public:
 };
 
 
+
+//------------------------------------------------------------------------------------------------------------------------------------
+
 void readData(Program& obj) {
     // Get the name of the parent folder
     std::string folderName;
@@ -357,9 +357,6 @@ void readData(Program& obj) {
         }
     }
 }
-
-
-//----------------------------------------------------------------------------------------------------------------------------
 
 
 void readData() {
