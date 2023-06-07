@@ -60,16 +60,25 @@ public:
         int totalCredits=0;
         bool passedAll=1;
 
-        for (auto it = subjects.begin(); it != subjects.end(); ++it) {
-            if ((*it).passStatus()) {
-                totalCredits += (*it).getCredits();
-            } else {
-                notPassedSubjects.push_back((*it).resetSubject());
-                // Modify the subject in the unordered set
-                const_cast<Subject&>(*it).modifySomeProperty();
+        for (const auto& subject : subjects) {
+            if (subject.passStatus()) {
+                totalCredits+=subject.getCredits();
+            }
+            else {
+                notPassedSubjects.push_back(subject.resetSubject());
             }
         }
-
+        for (const auto& subject : subjects) {
+            if (subject.passStatus()) {
+                totalCredits += subject.getCredits();
+            } else {
+                notPassedSubjects.push_back(subject.resetSubject());
+                // Modify the subject and add the modified version to the updated set
+                Subject modifiedSubject = subject;
+                modifiedSubject.modifySomeProperty();
+                updatedSubjects.insert(modifiedSubject);
+            }
+        }
         if (totalCredits >= 120){
             semester++;
             switch (semester) {
@@ -123,7 +132,6 @@ private:
     float FE;//grade at final exam
     int labAttendance;
     int courseAttendance;
-    int credits;
 
 public:
 
@@ -162,9 +170,6 @@ public:
         return courseAttendance
     }
 
-    int getCredits() const {
-        return credits;
-    }
 
 //update methods
 
@@ -232,6 +237,10 @@ public:
             return true;
         }
         return false;
+    }
+
+    int getCredits() const {
+        return 5*getFinalGrade();;
     }
 };
 
@@ -310,7 +319,7 @@ public:
 
 
 
-// //------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------
 
 // void readData(Program& obj) {
 //     // Get the name of the parent folder
